@@ -3,15 +3,56 @@
 import { useState } from "react";
 import { songs } from "@/app/data/album";
 
-export default function OverallReview() {
-  const [rating, setRating] = useState(0);
+interface OverallReviewProps {
+  reviews: Record<
+    number,
+    {
+      rating: number;
+      comment: string;
+    }
+  >;
+}
+
+export default function OverallReview({
+  reviews,
+}: OverallReviewProps) {
+  const [overallRating, setOverallRating] = useState(0);
+  const [favoriteTrack, setFavoriteTrack] = useState("");
+  const [finalThoughts, setFinalThoughts] = useState("");
+  const [submitting, setSubmitting] = useState(false);
+
+  async function handleSubmit() {
+    setSubmitting(true);
+
+    const feedback = {
+      overallRating,
+      favoriteTrack,
+      finalThoughts,
+      reviews,
+      submittedAt: new Date().toISOString(),
+    };
+
+    const res = await fetch("/api/submit", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(feedback),
+    });
+
+    if (res.ok) {
+      alert("Thanks! Your feedback has been submitted.");
+    } else {
+      alert("Something went wrong.");
+    }
+
+    setSubmitting(false);
+  }
 
   return (
     <section className="bg-zinc-900 border border-zinc-800 rounded-2xl p-8 mt-12 shadow-xl">
 
-      {/* Header */}
       <div className="text-center mb-10">
-
         <div className="text-5xl mb-4">👑</div>
 
         <h2 className="text-4xl font-bold mb-4">
@@ -21,30 +62,10 @@ export default function OverallReview() {
         <p className="text-zinc-300 text-lg">
           You've made it to the end.
         </p>
-
-        <p className="text-zinc-400 mt-6 leading-8">
-          Your ratings and comments will be
-          <br />
-          shared directly with
-          <br />
-          <span className="text-yellow-400 font-semibold">
-            Big Money Lynchie & Black Plague
-          </span>
-          .
-        </p>
-
-        <p className="text-zinc-500 mt-8">
-          Thank you for taking the time
-          <br />
-          to help shape this album.
-        </p>
-
       </div>
 
-      {/* Divider */}
       <div className="border-t border-zinc-700 my-10"></div>
 
-      {/* Overall Rating */}
       <h3 className="text-2xl font-bold mb-5">
         Overall Album Rating
       </h3>
@@ -53,9 +74,9 @@ export default function OverallReview() {
         {[1, 2, 3, 4, 5].map((star) => (
           <button
             key={star}
-            onClick={() => setRating(star)}
-            className={`text-5xl transition ${
-              rating >= star
+            onClick={() => setOverallRating(star)}
+            className={`text-5xl ${
+              overallRating >= star
                 ? "text-yellow-400"
                 : "text-zinc-600"
             }`}
@@ -65,25 +86,23 @@ export default function OverallReview() {
         ))}
       </div>
 
-      {/* Favorite Track */}
-
       <label className="block text-xl font-semibold mb-3">
         Favorite Track
       </label>
 
-      <select className="w-full bg-zinc-800 border border-zinc-700 rounded-xl p-4 mb-8 text-white">
-
-        <option>Select your favorite</option>
+      <select
+        value={favoriteTrack}
+        onChange={(e) => setFavoriteTrack(e.target.value)}
+        className="w-full bg-zinc-800 border border-zinc-700 rounded-xl p-4 mb-8 text-white"
+      >
+        <option value="">Select your favorite</option>
 
         {songs.map((song) => (
-          <option key={song.id}>
+          <option key={song.id} value={song.title}>
             {song.title}
           </option>
         ))}
-
       </select>
-
-      {/* Final Thoughts */}
 
       <label className="block text-xl font-semibold mb-3">
         Final Thoughts
@@ -91,31 +110,17 @@ export default function OverallReview() {
 
       <textarea
         rows={6}
-        placeholder="Tell the artists what you thought..."
-        className="w-full bg-zinc-800 border border-zinc-700 rounded-xl p-4 text-white mb-10 focus:outline-none focus:ring-2 focus:ring-yellow-500"
+        value={finalThoughts}
+        onChange={(e) => setFinalThoughts(e.target.value)}
+        className="w-full bg-zinc-800 border border-zinc-700 rounded-xl p-4 text-white mb-10"
       />
 
-      {/* Divider */}
-
-      <div className="border-t border-zinc-700 mb-8"></div>
-
-      {/* Submit */}
-
       <button
-        className="
-          w-full
-          bg-yellow-500
-          hover:bg-yellow-400
-          text-black
-          text-xl
-          font-bold
-          py-5
-          rounded-xl
-          transition
-          duration-300
-        "
+        onClick={handleSubmit}
+        disabled={submitting}
+        className="w-full bg-yellow-500 hover:bg-yellow-400 text-black text-xl font-bold py-5 rounded-xl"
       >
-        Finish Listening Session
+        {submitting ? "Submitting..." : "Finish Listening Session"}
       </button>
 
     </section>
