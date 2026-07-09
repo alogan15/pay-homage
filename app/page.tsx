@@ -6,6 +6,7 @@ import AlbumHeader from "@/components/AlbumHeader";
 import WelcomeCard from "@/components/WelcomeCard";
 import SongCard from "@/components/SongCard";
 import OverallReview from "@/components/OverallReview";
+import Footer from "@/components/Footer";
 
 import { songs } from "./data/album";
 

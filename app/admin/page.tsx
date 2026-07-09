@@ -2,6 +2,7 @@ export const dynamic = "force-dynamic";
 
 import { supabaseAdmin } from "@/lib/supabaseAdmin";
 import { songs } from "@/app/data/album";
+import Footer from "@/components/Footer";
 
 export default async function AdminPage() {
   const { data: feedback, error } = await supabaseAdmin
@@ -124,7 +125,7 @@ export default async function AdminPage() {
 
         </div>
       ))}
-
+    <Footer />
     </main>
   );
 }
