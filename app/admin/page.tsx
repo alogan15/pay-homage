@@ -37,6 +37,10 @@ export default async function AdminPage() {
           key={item.id}
           className="bg-zinc-900 border border-zinc-800 rounded-xl p-6 mb-8 shadow-xl"
         >
+          <p className="text-lg font-bold mb-4">
+            👤 {item.reviewer_name || "Anonymous"}
+          </p>
+
           {/* Overall Rating */}
 
           <h2 className="text-2xl font-bold mb-4">

@@ -11,10 +11,13 @@ interface OverallReviewProps {
       comment: string;
     }
   >;
+
+  reviewerName: string;
 }
 
 export default function OverallReview({
   reviews,
+  reviewerName,
 }: OverallReviewProps) {
   const [overallRating, setOverallRating] = useState(0);
   const [favoriteTrack, setFavoriteTrack] = useState("");
@@ -29,6 +32,7 @@ export default function OverallReview({
       favoriteTrack,
       finalThoughts,
       reviews,
+      reviewerName,
       submittedAt: new Date().toISOString(),
     };
 

@@ -12,6 +12,7 @@ export async function POST(request: Request) {
         favorite_track: body.favoriteTrack,
         final_thoughts: body.finalThoughts,
         song_reviews: body.reviews,
+        reviewer_name: body.reviewerName,
       });
 
     if (error) {

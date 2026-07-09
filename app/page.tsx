@@ -13,6 +13,7 @@ export default function Home() {
   const [reviews, setReviews] = useState<
     Record<number, { rating: number; comment: string }>
   >({});
+  const [reviewerName, setReviewerName] = useState("");
 
   return (
     <main className="min-h-screen bg-black text-white">
@@ -20,8 +21,10 @@ export default function Home() {
 
         <AlbumHeader />
 
-        <WelcomeCard />
-
+        <WelcomeCard
+          reviewerName={reviewerName}
+          setReviewerName={setReviewerName}
+        />
         {songs.map((song) => (
           <SongCard
             key={song.id}
@@ -36,8 +39,10 @@ export default function Home() {
           />
         ))}
 
-        <OverallReview reviews={reviews} />
-
+          <OverallReview
+            reviews={reviews}
+            reviewerName={reviewerName}
+          />
       </div>
     </main>
   );
