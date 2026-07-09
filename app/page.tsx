@@ -45,6 +45,7 @@ export default function Home() {
             reviewerName={reviewerName}
           />
       </div>
+      <Footer />
     </main>
   );
 }
